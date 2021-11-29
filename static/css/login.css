@@ -1,0 +1,64 @@
+body {
+    font-size: 2em;
+}
+
+.space {
+    height: 10vh;
+}
+
+.login {
+    background-color: #232323;
+    border-radius: 2em;
+    width: 18em;
+    padding-top: 1em;
+    padding-bottom: 2em;
+}
+
+.login-inner {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.login-inner p {
+    display: inline-block;
+    margin: 0;
+}
+
+.login-inner img {
+    height: 1em;
+    vertical-align: middle;
+}
+
+/*asd*/
+input {
+    font-size: 0.9em;
+    min-width: 15em;
+    display: block;
+    border: none;
+    padding: 0.4em 0;
+    border-bottom: solid 1px #8B6BFF;
+    transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #8B6BFF 4%) no-repeat -15em 0;
+    background-size: 15em 100%;
+    color: white;
+}
+
+input:focus, input:valid {
+    box-shadow: none;
+    outline: none;
+    background-position: 0 0;
+}
+
+
+input::-webkit-input-placeholder {
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
+    color: #8B6BFF;
+    font-size: 0.6em;
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+    visibility: visible !important;
+}

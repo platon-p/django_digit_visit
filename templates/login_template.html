@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>DigitVisit - ваша цифровая визитка</title>
+    {#    TODO: перепписать с jinja на django#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css">
+</head>
+<body>
+{#TODO: Расположить кнопку гугл и добавить ВК#}
+{% load socialaccount %}
+<div class="center-align">
+    <a class="oauth-container btn darken-4 white black-text" href="{% provider_login_url 'google' %}"
+       style="text-transform:none">
+        <div class="left">
+            <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in"
+                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+        </div>
+        Login with Google
+    </a>
+</div>
+
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+
+<div class="space"></div>
+<h2 align="center">{{ title }}</h2>
+<div align="center">
+    <div class="login">
+        <div class="login-inner" style="width: 14em; margin: auto;">
+            <div style="margin-bottom: 0.6em;" align="left">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/arrow.svg') }}" alt="">
+                    <p style="vertical-align: middle">&nbsp; Назад</p>
+                </a>
+            </div>
+            <form method="post">
+                {% if message %}
+                    <p style="color: #dd3841; font-size: 0.8em">{{ message }}</p>
+                    <br>
+                {% endif %}
+                {% for field in form if field.name != 'submit' %}
+                    {{ field() }}
+                {% endfor %}
+                <br>
+                <div style="line-height: 1.75em">
+                    {% if title == 'Вход' %}
+                        <a href="/register"
+                           style="vertical-align: middle; font-size: 0.8em; color: #bbb; display: inline-block; float:left;">Зарегистрироваться</a>
+                    {% endif %}
+
+                    <div style="float: right; vertical-align: middle;">
+                        {{ form.submit(class='btn btn-success', style='font-size: 0.8em; min-width: 3em') }}
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </form>
+            <br>
+            <a href="{{ url_for('google.login') }}">Войти с помощью Google</a>
+
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</div>
+</body>

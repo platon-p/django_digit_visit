@@ -35,6 +35,9 @@ class DataType(models.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return
+
 
 class Subscription(models.Model):
     id = models.AutoField(primary_key=True, unique=True)

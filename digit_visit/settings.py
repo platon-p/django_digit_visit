@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,6 +33,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.vk',
+
+    'import_export',
 ]
 SITE_ID = 1
 
@@ -50,7 +53,7 @@ ROOT_URLCONF = 'digit_visit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +69,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
 WSGI_APPLICATION = 'digit_visit.wsgi.application'
 
 # Database
@@ -139,7 +141,7 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         'SCOPE': [
             'email',
-            'friends'
         ]
-    }
+    },
 }
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
