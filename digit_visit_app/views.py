@@ -1,5 +1,9 @@
+from allauth.account.views import LoginView, SignupView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.views.generic import TemplateView
+
+from digit_visit_app.models import Cards, create_card, Subscription
 
 
 class HomePageView(TemplateView):
@@ -33,3 +37,36 @@ class HomePageView(TemplateView):
 
 class ProfilePageView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cards'] = Cards.objects.filter(user=self.request.user)
+        context['subscription'] = Subscription.objects.filter(user=self.request.user)
+        return context
+
+
+class LoginPageView(LoginView):
+    template_name = 'login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Вход'
+        return context
+
+
+class RegisterPageView(SignupView):
+    template_name = 'register.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form']['email'].field.required = True
+        context['title'] = 'Регистрация'
+        return context
+
+
+def create_page_view(request):
+    try:
+        create_card(request.user, 'Hello')
+        return HttpResponse('Success')
+    except Exception as e:
+        return HttpResponse(f':(((\n{e}')

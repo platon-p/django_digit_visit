@@ -1,0 +1,6 @@
+/digit_visit_app/migrations/
+.DS_Store
+.idea
+db.sqlite3
+digit_visit/__pycache__/
+digit_visit_app/__pycache__/

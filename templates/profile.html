@@ -28,23 +28,19 @@
     <p style="margin: 0" align="center"><a href="/" class="logo">DigitVisit</a></p>
 </div>
 
-<div class="steps">
-    {% for i in tarifs %}
-        <div class="step tarif">
-            <h3 style="margin-top: 0;" align="center">{{ i.0 }}</h3>
-            <div style="min-height: 11em">
-                <ol>
-                    {% for item in i.1 %}
-                        <li style="color: #aaa">{{ item }}</li>
-                    {% endfor %}
-                </ol>
-            </div>
-            <br>
-            <p align="center" style="font-weight: 600;">{{ i.2 }}</p>
-            <br>
-            <p align="center" style="color: #999">{{ i.3 }}</p>
-        </div>
-    {% endfor %}
+<h4>Здравствуйте, {{ user.first_name }}</h4>
+<h3>Ваши визитки</h3>
+{% for card in cards %}
+    <div class="question">
+        {{ card.title }}
+        <br>
+        Создано: {{ card.create_date }}
+    </div>
+{% endfor %}
+<a href="add/hello" class="btn btn-success">Создать</a>
+<h3>Подписка</h3>
+<div>
+    <p>{{ subscription }}</p>
 </div>
-
+<br>
 </body>
