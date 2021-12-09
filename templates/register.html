@@ -38,7 +38,7 @@
                     {{ message }}
                 {% endfor %}
 
-        {% endif %}
+            {% endif %}
             <form method="post" action="{% url 'account_signup' %}">
                 {% if message %}
                     <p style="color: #dd3841; font-size: 0.8em">{{ message }}</p>

@@ -1,9 +1,10 @@
 from allauth.account.views import LoginView, SignupView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 
-from digit_visit_app.models import Cards, create_card, Subscription
+from digit_visit_app.models import Cards, create_card, Subscription, DataType
+import datetime as dt
 
 
 class HomePageView(TemplateView):
@@ -41,7 +42,16 @@ class ProfilePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cards'] = Cards.objects.filter(user=self.request.user)
-        context['subscription'] = Subscription.objects.filter(user=self.request.user)
+
+        subs = Subscription.objects.filter(user=self.request.user).all()
+        subs = subs[len(subs) - 1]
+        context['time_left'] = subs.end_date.date() - dt.date.today()
+        if subs.subscription.price > 0 and subs.end_date.date() >= dt.datetime.now().date():
+            context['subscription'] = subs
+            context['is_free'] = False
+        else:
+            context['is_free'] = True
+            context['subscription'] = ''
         return context
 
 
@@ -62,6 +72,22 @@ class RegisterPageView(SignupView):
         context['form']['email'].field.required = True
         context['title'] = 'Регистрация'
         return context
+
+
+class CreatePageView(TemplateView):
+    template_name = 'create_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subs = Subscription.objects.filter(user=self.request.user).all()
+        subs = subs[len(subs) - 1]
+        context['is_free'] = not (subs.subscription.price > 0 and subs.end_date.date() >= dt.datetime.now().date())
+        context['fields'] = DataType.objects.filter(is_free=context['is_free']).all()
+        return context
+
+    def setup(self, request, *args, **kwargs):
+        print(11)
+        super().setup(request, *args, **kwargs)
 
 
 def create_page_view(request):

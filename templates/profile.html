@@ -9,6 +9,8 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
@@ -24,23 +26,47 @@
         <a href="{% url 'account_logout' %}">Выйти</a>
     </div>
 </div>
+<div style="margin: 2em;">
+    <h4>Здравствуйте, {{ user.first_name }}</h4>
+    <h3>Ваши визитки</h3>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+        {% for card in cards %}
+            <div class="card">
+                <p class="p-title">{{ card.title }}</p>
+
+                <br>
+                <p>Создано: {{ card.create_date }}</p>
+            </div>
+        {% endfor %}
+
+        <div class="card"
+             style="border-style: dashed; border-color: #898989;">
+            <a href="{% url 'create' %}">
+                <span style="vertical-align:middle; ">
+                    <p style="text-align: center; font-size: 2em; vertical-align:middle">+</p>
+                </span>
+            </a>
+        </div>
+    </div>
+    <br>
+    <div style="clear:both;"></div>
+
+
+    <h3>Подписка</h3>
+    <div>
+        {% if subscription == '' %}
+            <p>Подписка не активна</p>
+            <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
+        {% else %}
+            <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date }}</p>
+            <a>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</a>
+        {% endif %}
+    </div>
+
+</div>
+
 <div class="nav-mobile">
     <p style="margin: 0" align="center"><a href="/" class="logo">DigitVisit</a></p>
 </div>
 
-<h4>Здравствуйте, {{ user.first_name }}</h4>
-<h3>Ваши визитки</h3>
-{% for card in cards %}
-    <div class="question">
-        {{ card.title }}
-        <br>
-        Создано: {{ card.create_date }}
-    </div>
-{% endfor %}
-<a href="add/hello" class="btn btn-success">Создать</a>
-<h3>Подписка</h3>
-<div>
-    <p>{{ subscription }}</p>
-</div>
-<br>
 </body>

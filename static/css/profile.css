@@ -1,0 +1,14 @@
+.card {
+    background-color: #232323;
+    border-radius: 1.3em;
+    padding: 1em;
+    width: 25%;
+    margin: 0.3em
+}
+p {
+    font-size: 0.9em;
+    margin: 0;
+}
+p.p-title {
+    font-size: 1.2em;
+}
