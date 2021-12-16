@@ -2,10 +2,6 @@ body {
     font-size: 2em;
 }
 
-.space {
-    height: 10vh;
-}
-
 .login {
     background-color: #232323;
     border-radius: 2em;
@@ -29,7 +25,6 @@ body {
     vertical-align: middle;
 }
 
-/*asd*/
 input {
     font-size: 0.9em;
     min-width: 15em;
@@ -43,7 +38,7 @@ input {
     color: white;
 }
 
-input:focus, input:valid {
+input:focus {
     box-shadow: none;
     outline: none;
     background-position: 0 0;

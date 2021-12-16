@@ -4,6 +4,7 @@
     justify-content: space-between;
     flex-direction: column;
 }
-.card {
-    display: flex;
+
+input[type=submit] {
+    min-width: auto;
 }

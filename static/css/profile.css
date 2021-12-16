@@ -5,10 +5,21 @@
     width: 25%;
     margin: 0.3em
 }
+
 p {
     font-size: 0.9em;
     margin: 0;
 }
+
 p.p-title {
     font-size: 1.2em;
+}
+
+
+.add-card {
+    border-style: dashed;
+    border-color: #898989;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

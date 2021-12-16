@@ -88,3 +88,8 @@ a:disabled {
         display: block;
     }
 }
+input[type=submit] {
+    font-size: 0.7em;
+    border: none;
+    color: white;
+}

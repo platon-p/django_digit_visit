@@ -22,7 +22,6 @@
 
 </head>
 <body>
-<div class="space"></div>
 <h2 align="center">{{ title }}</h2>
 <div align="center">
     <div class="login">
@@ -48,17 +47,18 @@
                        style="vertical-align: middle; font-size: 0.8em; color: #bbb; display: inline-block; float:left;">Зарегистрироваться</a>
 
                     <div style="float: right; vertical-align: middle;">
-                        <a href="{% url 'profile_page' %}" class="btn btn-success">Войти</a>
+                        <input type="submit" value="Войти" class="btn btn-success" style="min-width: auto">
                     </div>
                     <div style="clear:both;"></div>
                 </div>
             </form>
             <br>
+            <div align="left">
 
-            <a href="{% provider_login_url 'google' %}">Войти с помощью Google</a>
-            <a href="{% provider_login_url 'vk' %}">Войти с помощью ВК</a>
+                <a href="{% provider_login_url 'google' %}">Войти с помощью Google</a>
+                <a href="{% provider_login_url 'vk' %}">Войти с помощью ВК</a>
+            </div>
 
-            <div style="clear: both;"></div>
         </div>
     </div>
 </div>

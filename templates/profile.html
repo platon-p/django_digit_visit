@@ -26,8 +26,15 @@
         <a href="{% url 'account_logout' %}">Выйти</a>
     </div>
 </div>
+<div class="nav-mobile">
+    <p style="" align="center"><a href="/" class="logo">DigitVisit</a></p>
+</div>
 <div style="margin: 2em;">
-    <h4>Здравствуйте, {{ user.first_name }}</h4>
+    {% if user.first_name %}
+        <h4>Здравствуйте, {{ user.first_name }}</h4>
+    {% else %}
+        <h4>Здравствуйте!</h4>
+    {% endif %}
     <h3>Ваши визитки</h3>
     <div style="display: flex; flex-direction: row; flex-wrap: wrap">
         {% for card in cards %}
@@ -38,35 +45,27 @@
                 <p>Создано: {{ card.create_date }}</p>
             </div>
         {% endfor %}
-
-        <div class="card"
-             style="border-style: dashed; border-color: #898989;">
+        <div class="card add-card">
             <a href="{% url 'create' %}">
-                <span style="vertical-align:middle; ">
-                    <p style="text-align: center; font-size: 2em; vertical-align:middle">+</p>
-                </span>
+                <p style="font-size: 2em; display:inline-block; width: 100%;">+</p>
             </a>
         </div>
     </div>
     <br>
-    <div style="clear:both;"></div>
-
-
     <h3>Подписка</h3>
     <div>
-        {% if subscription == '' %}
+        {% if not subscription_is_active %}
             <p>Подписка не активна</p>
             <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
         {% else %}
             <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date }}</p>
-            <a>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</a>
+            {% if time_left < 7 %}
+                <p>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</p>
+            {% else %}
+                <p>Подписка активна. Осталось {{ time_left }} дн.</p>
+            {% endif %}
         {% endif %}
     </div>
 
 </div>
-
-<div class="nav-mobile">
-    <p style="margin: 0" align="center"><a href="/" class="logo">DigitVisit</a></p>
-</div>
-
 </body>

@@ -1,10 +1,12 @@
+import datetime as dt
+
 from allauth.account.views import LoginView, SignupView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.forms import BoundField
 from django.views.generic import TemplateView, FormView
 
-from digit_visit_app.models import Cards, create_card, Subscription, DataType
-import datetime as dt
+from digit_visit_app.models import Cards, Subscription, DataType
+from .forms import CreateFreeForm
 
 
 class HomePageView(TemplateView):
@@ -42,16 +44,14 @@ class ProfilePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cards'] = Cards.objects.filter(user=self.request.user)
-
         subs = Subscription.objects.filter(user=self.request.user).all()
-        subs = subs[len(subs) - 1]
-        context['time_left'] = subs.end_date.date() - dt.date.today()
-        if subs.subscription.price > 0 and subs.end_date.date() >= dt.datetime.now().date():
-            context['subscription'] = subs
-            context['is_free'] = False
-        else:
-            context['is_free'] = True
-            context['subscription'] = ''
+        context['subscription'] = ''
+        context['subscription_is_active'] = False
+        if subs:
+            sub = subs[len(subs) - 1]
+            if sub.end_date.date() >= dt.date.today():
+                context['subscription'] = sub
+                context['subscription_is_active'] = True
         return context
 
 
@@ -74,25 +74,20 @@ class RegisterPageView(SignupView):
         return context
 
 
-class CreatePageView(TemplateView):
+class CreatePageView(FormView):
     template_name = 'create_page.html'
+    form_class = CreateFreeForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         subs = Subscription.objects.filter(user=self.request.user).all()
-        subs = subs[len(subs) - 1]
-        context['is_free'] = not (subs.subscription.price > 0 and subs.end_date.date() >= dt.datetime.now().date())
-        context['fields'] = DataType.objects.filter(is_free=context['is_free']).all()
+        context['subscription_is_active'] = False
+        if subs:
+            sub = subs[len(subs) - 1]
+            if sub.end_date.date() >= dt.date.today():
+                context['subscription_is_active'] = True
+        context['fields'] = DataType.objects.filter(is_free=context['subscription_is_active']).all()
         return context
 
     def setup(self, request, *args, **kwargs):
-        print(11)
         super().setup(request, *args, **kwargs)
-
-
-def create_page_view(request):
-    try:
-        create_card(request.user, 'Hello')
-        return HttpResponse('Success')
-    except Exception as e:
-        return HttpResponse(f':(((\n{e}')

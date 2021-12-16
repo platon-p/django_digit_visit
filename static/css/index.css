@@ -1,24 +1,33 @@
 .plus {
-    height: 7.2em;
     border-radius: 1.5em;
     margin-bottom: 0.5em;
     padding: 1em 0.7em 1em 1em;
-    /*transition-duration: .5s;*/
-
 }
 
-p .plus .plus-head {
+.pluses {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap
+}
+
+@media screen and (min-width: 1025px) {
+    .plus {
+        width: 45%;
+    }
+}
+
+.plus-head {
     color: #fff;
+    margin: 0;
 }
 
 .plus-text {
+    display: inline-block;
+    margin-top: 2em;
     color: #eee;
-    font-size: 0.8em
+    font-size: 0.8em;
 }
-
-/*.plus:hover {*/
-/*    background-color: green;*/
-/*}*/
 
 .plus img {
     max-width: 30%;
@@ -28,8 +37,6 @@ p .plus .plus-head {
 }
 
 .plus p {
-    margin-bottom: 0;
-    margin-top: 0;
     display: inline-block;
     max-width: 65%;
 }

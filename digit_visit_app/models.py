@@ -88,8 +88,5 @@ def user_signed_up_receiver(request: WSGIRequest, user: User, **kwargs):
     if user.email:
         add_user_data(user, 'Email', user.email)
 
-    sub = Subscription(user=user, subscription=SubscriptionType.objects.filter(name='Free')[0])
-    sub.save()
-
 
 user_signed_up.connect(user_signed_up_receiver, sender=User)

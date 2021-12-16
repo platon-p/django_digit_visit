@@ -37,7 +37,6 @@
                 {% for message in messages %}
                     {{ message }}
                 {% endfor %}
-
             {% endif %}
             <form method="post" action="{% url 'account_signup' %}">
                 {% if message %}
@@ -49,19 +48,16 @@
                 {{ form.email }}
                 {{ form.password1 }}
                 {{ form.password2 }}
-                <br>
-                <div style="line-height: 1.75em">
-                    <div style="float: right; vertical-align: middle;">
-                        <a href="{% url 'profile_page' %}" class="btn btn-success">Зарегистрироваться</a>
-                    </div>
-                    <div style="clear:both;"></div>
-                </div>
                 {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    <input style="display:none;" type="hidden" name="{{ redirect_field_name }}"
+                           value="{{ redirect_field_value }}"/>
                 {% endif %}
+                <br>
+                <div style="float: right; vertical-align: middle;">
+                    <input type="submit" value="Зарегистрироваться" class="btn btn-success" style="min-width: auto">
+                </div>
             </form>
             <br>
-
             <div style="clear: both;"></div>
         </div>
     </div>
