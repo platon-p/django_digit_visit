@@ -12,14 +12,6 @@
     <link rel="stylesheet" href="{% static "css/style1.css" %}">
     <link rel="stylesheet" href="{% static "css/login.css" %}">
 
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css">
-
-
 </head>
 <body>
 <div class="space"></div>
@@ -33,21 +25,27 @@
                     <p style="vertical-align: middle">&nbsp; Назад</p>
                 </a>
             </div>
+
             {% if messages %}
                 {% for message in messages %}
                     {{ message }}
                 {% endfor %}
             {% endif %}
             <form method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
                 {% if message %}
                     <p style="color: #dd3841; font-size: 0.8em">{{ message }}</p>
                     <br>
                 {% endif %}
                 {% csrf_token %}
-                {{ form.username }}
-                {{ form.email }}
-                {{ form.password1 }}
-                {{ form.password2 }}
+                {% for field in form %}
+                    {{ field }}
+                    {% if field.errors %}
+                        {% for err in field.errors %}
+                        <p style="color: red; text-align:left; font-size: 0.7em; margin-left: 0.2em;">{{ err }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
                 {% if redirect_field_value %}
                     <input style="display:none;" type="hidden" name="{{ redirect_field_name }}"
                            value="{{ redirect_field_value }}"/>

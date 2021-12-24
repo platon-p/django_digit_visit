@@ -12,14 +12,6 @@
     <link rel="stylesheet" href="{% static "css/style1.css" %}">
     <link rel="stylesheet" href="{% static "css/login.css" %}">
 
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css">
-
-
 </head>
 <body>
 <h2 align="center">{{ title }}</h2>
@@ -39,8 +31,20 @@
                 {% endif %}
                 {% csrf_token %}
 
-                {{ form.login }}
-                {{ form.password }}
+                {% for field in form %}
+                    {% if field.name != 'remember' %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.errors %}
+                        {% for err in field.errors %}
+                            <p class="error" style="margin-left: 0.2em;">{{ err }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for err in form.non_field_errors %}
+                    <p class="error">{{ err }}</p>
+                {% endfor %}
                 <br>
                 <div style="line-height: 1.75em">
                     <a href="{{ signup_url }}"
