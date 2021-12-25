@@ -24,8 +24,8 @@
     <p style="" align="center"><a href="/" class="logo">DigitVisit</a></p>
 </div>
 <div style="margin: 2em;">
-    {% if user.first_name %}
-        <h4>Здравствуйте, {{ user.first_name }}</h4>
+    {% if user_info.Имя %}
+        <h4>Здравствуйте, {{ user_info.Имя }}!</h4>
     {% else %}
         <h4>Здравствуйте!</h4>
     {% endif %}

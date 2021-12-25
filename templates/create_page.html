@@ -8,19 +8,12 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css">
 </head>
 <body>
-<form action="">
+<form action="" method="post">
+    {% csrf_token %}
     <table>
         {% for field in form %}
             <tr>
@@ -31,6 +24,17 @@
                 <td style="width: 2em;"></td>
                 <td>{{ field }}</td>
             </tr>
+            {% if field.label == 'Адрес визитки' %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><p style="color: #aaaaaa; font-size: 0.8em;">Пример: <br>{{ domain }}<span id="or"></span>
+                    </p>
+                    </td>
+                </tr>
+                <tr style="height: 1em;"></tr>
+            {% endif %}
         {% endfor %}
         <tr>
             <td></td>
@@ -39,6 +43,8 @@
             <td align="right"><input type="submit" value="Создать" class="btn btn-success"></td>
         </tr>
     </table>
+    <script src="{% static 'scripts/index.js' %}"></script>
+
 </form>
 
 </body>

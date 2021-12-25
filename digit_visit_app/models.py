@@ -4,6 +4,7 @@ from allauth.account.signals import user_signed_up
 from django.contrib.auth import get_user_model
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -36,6 +37,10 @@ class DataType(models.Model):
 
 
 class Subscription(models.Model):
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+
     user = models.ForeignKey('auth.User', models.CASCADE, verbose_name='Пользователь')
     subscription = models.ForeignKey('SubscriptionType', models.CASCADE, verbose_name='Тип подписки')
     start_date = models.DateTimeField(editable=False)
@@ -56,16 +61,23 @@ class Data(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return f'{self.user.first_name}`s {self.data_type.name}: {self.content}'
+        return f'{self.user.first_name if self.user.first_name else "Unknown"}`s {self.data_type.name}: {self.content}'
+
+    def to_lst(self):
+        return [self.user, self.data_type.name, self.content]
 
 
 class Cards(models.Model):
+    class Meta:
+        verbose_name = 'Визитка'
+        verbose_name_plural = 'Визитки'
+
     user = models.ForeignKey('auth.User', models.CASCADE)
     title = models.CharField(max_length=100)
     create_date = models.DateTimeField(editable=False)
 
     def save(self, *args, **kwargs):
-        self.create_date = dt.datetime.now()
+        self.create_date = timezone.now()
         super(Cards, self).save(*args, **kwargs)
 
     def __str__(self):

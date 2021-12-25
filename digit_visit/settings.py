@@ -120,22 +120,12 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'APP': {
-            'client_id': '449718793887-985jt4nolelbd5spdkdfbodtn1s0h3nu.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        },
         'SCOPE': [
             'profile',
             'email',
         ],
     },
     'vk': {
-        'APP': {
-            'client_id': '8011729',
-            'secret': 'Bkp3OdM3RH1iwrXpO5rn',
-            'key': '60c6286c60c6286c60c6286cb960bc17bd660c660c6286c016475816d29361c1165728f'
-        },
         'SCOPE': [
             'email',
         ]
