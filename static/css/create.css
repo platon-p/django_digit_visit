@@ -8,3 +8,21 @@
 input[type=submit] {
     min-width: auto;
 }
+
+input, textarea {
+    border: solid #424242 0.1em;
+    border-radius: 0.3em;
+    background-color: #111;
+    color: white;
+    font-size: 1.1em;
+    padding: 0.3em;
+    max-width: 80%;
+    outline: none;
+    transition-duration: 0.2s;
+}
+textarea {
+    font-size: 1em;
+}
+input:focus {
+    border-color: #8B6BFF;
+}

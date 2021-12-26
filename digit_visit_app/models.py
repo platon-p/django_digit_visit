@@ -28,9 +28,18 @@ class DataType(models.Model):
         verbose_name = 'Поле визитки'
         verbose_name_plural = 'Поля визитки'
 
+    choices = (
+        ('String', 'Строка'),
+        ('Text', 'Текст'),
+        ('Date', 'Дата'),
+        ('Image', 'Картинка'),
+        ('Phone', 'Телефон'),
+        ('Email', 'Email'),
+    )
     name = models.CharField('Название поля', max_length=100, unique=True)
     is_free = models.BooleanField('Бесплатный', default=False)
     required = models.BooleanField('Обязательный', default=False)
+    field_type = models.CharField('Тип поля', choices=choices, default='String', max_length=255)
 
     # TODO: сделать выбор типа поля (картинка, текст и тд)
     def __str__(self):

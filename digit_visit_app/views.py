@@ -54,6 +54,7 @@ class ProfilePageView(LoginRequiredMixin, TemplateView):
             if sub.end_date.date() >= dt.date.today():
                 context['subscription'] = sub
                 context['subscription_is_active'] = True
+            context['time_left'] = (sub.end_date.date() - dt.date.today()).days
         user_info = list(Data.objects.filter(user=self.request.user).all())
         user_info = [i.to_lst() for i in user_info]
         context['user_info'] = {i[1]: i[2] for i in user_info}

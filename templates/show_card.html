@@ -10,21 +10,20 @@
     {% load poll_extras %}
     <link rel="stylesheet" href="{% static 'css/card.css' %}">
 </head>
-
+<header>
+    <h1></h1>
+</header>
 <body>
-<div style="width: 90%; display:flex; justify-content: space-between; margin: auto;">
-    <img src="{% static 'images/image.jpeg' %}" alt="" style="max-height: 10em; max-width: 43%">
-    <div style="width: 43%;">
+<div class="row">
+    <img src="{% static 'images/image.jpeg' %}" alt="" style="width: 45%">
+    <div style="width: 45%;">
         <p style="text-align: left;font-weight: 600;">{{ card_content| getkey:'Фамилия' }} {{ card_content| getkey:'Имя' }}</p>
         <br>
         <p style="text-align: left; font-weight: 300; color: #cccccc">{{ card_content| getkey:'Должность' }}</p>
-
-
     </div>
 </div>
 <br>
-{{ card_content| getkey:'О себе' }}
-<div style="width: 90%; display:flex; justify-content: space-between; margin: auto;">
+<div class="row">
     <div class="btn">
         <a href="mailto:{{ card_content.Телефон }}">
             <div align="center" style="display:flex; flex-direction: column">
@@ -42,5 +41,15 @@
         </a>
     </div>
 
+</div>
+<div class="row">
+    <div class="btn" style="width: 100%; padding: 0;">
+        <div style="padding: 1em">
+            <h3 style="margin: 0 0 0.6em;">О себе</h3>
+            <p style="text-align: left; color: #d9d9d9; font-weight: 300;">
+                {{ card_content| getkey:'О себе' }}
+            </p>
+        </div>
+    </div>
 </div>
 </body>
