@@ -20,9 +20,11 @@ input, textarea {
     outline: none;
     transition-duration: 0.2s;
 }
+
 textarea {
     font-size: 1em;
 }
+
 input:focus {
     border-color: #8B6BFF;
 }

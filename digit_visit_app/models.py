@@ -99,6 +99,9 @@ class CardsContent(models.Model):
     card = models.ForeignKey('Cards', models.CASCADE)
     data = models.ForeignKey('Data', models.CASCADE)
 
+    def __str__(self):
+        return f'Визитка {self.card.title}\t-\t{self.data}'
+
 
 from .utils import *
 

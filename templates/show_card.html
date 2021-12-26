@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width; initial-scale=0.7">
 
     <title>DigitVisit - ваша цифровая визитка</title>
 
@@ -25,7 +26,7 @@
 <br>
 <div class="row">
     <div class="btn">
-        <a href="mailto:{{ card_content.Телефон }}">
+        <a href="tel:{{ card_content.Телефон }}">
             <div align="center" style="display:flex; flex-direction: column">
                 <img src="{% static 'images/phone.svg' %}" alt="" style="margin: auto;">
                 <p style="margin-top: 0.4em;">Телефон</p>

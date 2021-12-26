@@ -2,19 +2,15 @@ from django import forms
 
 from .models import DataType
 
-
-class PlainTextField(forms.CharField):
-    widget = forms.Textarea
-
-
 field_types = {
-    'String': forms.CharField,
-    'Text': PlainTextField,
-    'Date': forms.DateField,
-    'Image': forms.ImageField,
-    'Phone': forms.CharField,
-    'Email': forms.EmailField,
+    'String': forms.CharField(),
+    'Text': forms.CharField(widget=forms.Textarea),
+    'Date': forms.DateField(),
+    'Image': forms.ImageField(allow_empty_file=False),
+    'Phone': forms.CharField(),
+    'Email': forms.EmailField(),
 }
+field_types['Image'].widget.attrs['id'] = 'ImageField'
 
 
 class CreateForm(forms.Form):
@@ -32,4 +28,5 @@ class CreateForm(forms.Form):
         self.fields['Адрес визитки'].widget.attrs['id'] = 'address'
 
         for i in fields:
-            self.fields[i.name] = field_types[i.field_type](required=i.required)
+            self.fields[i.name] = field_types[i.field_type]
+            self.fields[i.name].required = i.required
