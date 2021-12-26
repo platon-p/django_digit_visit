@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>DigitVisit - ваша цифровая визитка</title>
+
+    {% load static %}
+    {% load poll_extras %}
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
+</head>
+
+<body>
+<div style="width: 90%; display:flex; justify-content: space-between; margin: auto;">
+    <img src="{% static 'images/image.jpeg' %}" alt="" style="max-height: 10em; max-width: 43%">
+    <div style="width: 43%;">
+        <p style="text-align: left;font-weight: 600;">{{ card_content| getkey:'Фамилия' }} {{ card_content| getkey:'Имя' }}</p>
+        <br>
+        <p style="text-align: left; font-weight: 300; color: #cccccc">{{ card_content| getkey:'Должность' }}</p>
+
+
+    </div>
+</div>
+<br>
+{{ card_content| getkey:'О себе' }}
+<div style="width: 90%; display:flex; justify-content: space-between; margin: auto;">
+    <div class="btn">
+        <a href="mailto:{{ card_content.Телефон }}">
+            <div align="center" style="display:flex; flex-direction: column">
+                <img src="{% static 'images/phone.svg' %}" alt="" style="margin: auto;">
+                <p style="margin-top: 0.4em;">Телефон</p>
+            </div>
+        </a>
+    </div>
+    <div class="btn">
+        <a href="mailto:{{ card_content.Email }}">
+            <div align="center" style="display:flex; flex-direction: column">
+                <img src="{% static 'images/mail.svg' %}" alt="" style="margin: auto;">
+                <p style="margin-top: 0.4em;">Email</p>
+            </div>
+        </a>
+    </div>
+
+</div>
+</body>

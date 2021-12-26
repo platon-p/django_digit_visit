@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap");
+@import url("https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css");
+
+body {
+    margin: 0;
+    background-color: #0A0A0A;
+    font-size: 1.6em;
+    font-family: Inter, sans-serif;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.btn {
+    background-color: #232323;
+    border-radius: 1em;
+
+    padding: 0.4em;
+
+    width: 45%;
+}
+.btn img {
+    max-height: 2em;
+
+}
+p {
+    margin: 0;
+    text-align: center;
+}

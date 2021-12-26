@@ -23,6 +23,9 @@
                 <td>{{ field.label_tag }}</td>
                 <td style="width: 2em;"></td>
                 <td>{{ field }}</td>
+                {% if field.errors %}
+                    <td class="error">{{ field.errors }}</td>
+                {% endif %}
             </tr>
             {% if field.label == 'Адрес визитки' %}
                 <tr>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="135px" height="108px" viewBox="0 0 135 108" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_fluent_mail_24_filled</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-163.000000, -140.000000)" fill="#3280F3" fill-rule="nonzero">
+            <g id="ic_fluent_mail_24_filled" transform="translate(163.000000, 140.000000)">
+                <path d="M135,31.104 L135,86.0625 C135,97.6963085 125.919649,107.307597 114.3045,107.96625 L113.0625,108 L21.9375,108 C10.3036915,108 0.692402522,98.9196487 0.03375,87.3045 L0,86.0625 L0,31.104 L65.151,65.232 C66.6221974,66.0026124 68.3778026,66.0026124 69.849,65.232 L135,31.104 Z M21.9375,0 L113.0625,0 C124.327149,-0.00135691183 133.762069,8.52916503 134.892,19.737 L67.5,55.0395 L0.108,19.737 C1.18901582,9.00417358 9.91248253,0.649908711 20.682,0.03375 L21.9375,0 L113.0625,0 L21.9375,0 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

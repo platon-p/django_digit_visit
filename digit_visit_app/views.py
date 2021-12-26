@@ -2,10 +2,10 @@ import datetime as dt
 
 from allauth.account.views import LoginView, SignupView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import redirect, render
-from django.views.generic import TemplateView, FormView
 from django.contrib.sites.models import Site
+from django.core.handlers.wsgi import WSGIRequest
+from django.shortcuts import redirect, render, get_object_or_404
+from django.views.generic import TemplateView
 
 from digit_visit_app.models import Cards, Subscription, Data, DataType, CardsContent
 from .forms import CreateForm
@@ -79,26 +79,6 @@ class RegisterPageView(SignupView):
         return context
 
 
-class CreatePageView(FormView):
-    template_name = 'create_page.html'
-    form_class = CreateForm
-    success_url = '/profile'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        subs = Subscription.objects.filter(user=self.request.user).all()
-        context['subscription_is_active'] = False
-
-        if subs:
-            sub = subs[len(subs) - 1]
-            if sub.end_date.date() >= dt.date.today():
-                context['subscription_is_active'] = True
-        return context
-
-    def form_valid(self, form):
-        return redirect(self.success_url)
-
-
 def create_page_view(request: WSGIRequest):
     subs = Subscription.objects.filter(user=request.user).all()
     subscription_is_active = False
@@ -109,11 +89,15 @@ def create_page_view(request: WSGIRequest):
 
     if request.method == 'POST':
         form = CreateForm(request.POST, is_free=not subscription_is_active)
+        domain = Site.objects.get_current().domain + '/v/'
         if not form.is_valid():
-            return render(request, 'create_page.html', {'form': form})
+            return render(request, 'create_page.html', {'form': form, 'domain': domain})
         a = {DataType.objects.filter(name=i[0]).first(): i[1] for i in form.data.items() if
              i[0] != 'csrfmiddlewaretoken' or i[1]}
-        card = Cards(user=request.user, title=form.data['Название'])
+        if Cards.objects.filter(slug=form.data['Адрес визитки']):
+            form.errors['Адрес визитки'] = 'Адрес уже занят'
+            return render(request, 'create_page.html', {'form': form, 'domain': domain})
+        card = Cards(user=request.user, title=form.data['Название'], slug=form.data['Адрес визитки'])
         card.save()
         for i in a.items():
             if i[0] is None:
@@ -129,3 +113,15 @@ def create_page_view(request: WSGIRequest):
     form = CreateForm(is_free=not subscription_is_active, initial=user_data)
     domain = Site.objects.get_current().domain + '/v/'
     return render(request, 'create_page.html', {'form': form, 'domain': domain})
+
+
+class ShowCardView(TemplateView):
+    template_name = 'show_card.html'
+
+    def get_context_data(self, **kwargs):
+        a = get_object_or_404(Cards, slug=self.kwargs['slug'])
+        card_content = CardsContent.objects.filter(card=a).all()
+
+        card_content = {i.data.data_type.name: i.data.content for i in card_content}
+        context = {'card_content': card_content}
+        return context

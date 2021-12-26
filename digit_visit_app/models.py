@@ -32,6 +32,7 @@ class DataType(models.Model):
     is_free = models.BooleanField('Бесплатный', default=False)
     required = models.BooleanField('Обязательный', default=False)
 
+    # TODO: сделать выбор типа поля (картинка, текст и тд)
     def __str__(self):
         return self.name
 
@@ -75,6 +76,7 @@ class Cards(models.Model):
     user = models.ForeignKey('auth.User', models.CASCADE)
     title = models.CharField(max_length=100)
     create_date = models.DateTimeField(editable=False)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
     def save(self, *args, **kwargs):
         self.create_date = timezone.now()
