@@ -20,7 +20,7 @@
     <div class="login">
         <div class="login-inner" style="width: 14em; margin: auto;">
             <div align="left">
-                <a href="/">
+                <a href="javascript:history.go(-1);">
                     <img src="{% static 'images/arrow.svg' %}" alt="">
                     <p style="vertical-align: middle">&nbsp; Назад</p>
                 </a>
@@ -42,7 +42,7 @@
                     {{ field }}
                     {% if field.errors %}
                         {% for err in field.errors %}
-                        <p style="color: red; text-align:left; font-size: 0.7em; margin-left: 0.2em;">{{ err }}</p>
+                            <p style="color: red; text-align:left; font-size: 0.7em; margin-left: 0.2em;">{{ err }}</p>
                         {% endfor %}
                     {% endif %}
                 {% endfor %}

@@ -19,18 +19,12 @@
     <div class="login">
         <div class="login-inner" style="width: 14em; margin: auto;">
             <div align="left">
-                <a href="/">
+                <a href="javascript:history.go(-1);">
                     <img src="{% static 'images/arrow.svg' %}" alt="">
                     <p style="vertical-align: middle">&nbsp; Назад</p>
                 </a>
             </div>
             <form method="post">
-                {% if message %}
-                    <p style="color: #dd3841; font-size: 0.8em">{{ message }}</p>
-                    <br>
-                {% endif %}
-                {% csrf_token %}
-
                 {% for field in form %}
                     {% if field.name != 'remember' %}
                         {{ field }}

@@ -1,4 +1,5 @@
 import datetime as dt
+from os.path import join
 
 from allauth.account.views import LoginView, SignupView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +9,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView
 
+from digit_visit.settings import STATIC_URL
 from digit_visit_app.models import Cards, Subscription, Data, DataType, CardsContent
 from .forms import CreateForm
 
@@ -89,38 +91,17 @@ def create_page_view(request: WSGIRequest):
         if sub.end_date.date() >= dt.date.today():
             subscription_is_active = True
     domain = Site.objects.get_current().domain + '/v/'
-    form = CreateForm(request.POST, is_free=not subscription_is_active)
-
     if request.method == 'POST':
-        if not form.is_valid():
-            return render(request, 'create_page.html', {'form': form, 'domain': domain})
-        if Cards.objects.filter(slug=form.data['Адрес визитки']):
-            form.errors['Адрес визитки'] = 'Адрес уже занят'
-            return render(request, 'create_page.html', {'form': form, 'domain': domain})
-        a = {DataType.objects.filter(name=key).first(): val for key, val in form.data.items() if
-             key != 'csrfmiddlewaretoken' or val}
-
-        card = Cards(user=request.user, title=form.data['Название'], slug=form.data['Адрес визитки'])
-        card.save()
-
-        for key, val in a.items():
-            if val is None or key is None:
-                continue
-            data = Data(user=request.user, data_type=key, content=val)
-            exist = Data.objects.filter(user=request.user, data_type=key).last()
-            if not exist:
-                data.save()
-                card_content = CardsContent(card=card, data=data)
-            else:
-                card_content = CardsContent(card=card, data=exist)
-            card_content.save()
-        return redirect(reverse('profile'))
+        form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
+        if form.is_valid():
+            form.save(request)
+            return redirect(reverse('profile_page'))
     else:
         user_data = Data.objects.filter(user=request.user).all()
         user_data = {i.to_lst()[1]: i.to_lst()[2] for i in user_data}
         form = CreateForm(is_free=not subscription_is_active, initial=user_data)
         domain = Site.objects.get_current().domain + '/v/'
-        return render(request, 'create_page.html', {'form': form, 'domain': domain})
+    return render(request, 'create_page.html', {'form': form, 'domain': domain})
 
 
 class ShowCardView(TemplateView):

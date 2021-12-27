@@ -6,6 +6,9 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
 from django.utils import timezone
 
+from digit_visit.settings import STATIC_URL
+from os.path import join
+
 User = get_user_model()
 
 
@@ -41,7 +44,6 @@ class DataType(models.Model):
     required = models.BooleanField('Обязательный', default=False)
     field_type = models.CharField('Тип поля', choices=choices, default='String', max_length=255)
 
-    # TODO: сделать выбор типа поля (картинка, текст и тд)
     def __str__(self):
         return self.name
 
@@ -86,6 +88,7 @@ class Cards(models.Model):
     title = models.CharField(max_length=100)
     create_date = models.DateTimeField(editable=False)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    image = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.create_date = timezone.now()

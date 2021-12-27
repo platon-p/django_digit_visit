@@ -8,12 +8,12 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-{#    <link rel="stylesheet" href="{% static 'css/login.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'css/login.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/create.css' %}">
 
 </head>
 <body>
-<form action="" method="post">
+<form method="POST" action="" enctype='multipart/form-data'>
     {% csrf_token %}
     <table>
         {% for field in form %}
