@@ -5,11 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from .models import DataType, Cards, Data, CardsContent
 
 field_types = {
-    'String': forms.CharField(),
-    'Text': forms.CharField(widget=forms.Textarea),
-    'Date': forms.DateField(),
-    'Phone': forms.CharField(),
-    'Email': forms.EmailField(),
+    'String': forms.CharField,
+    'Text': forms.CharField,
+    'Date': forms.DateField,
+    'Phone': forms.CharField,
+    'Email': forms.EmailField,
 }
 
 
@@ -37,10 +37,11 @@ class CreateForm(forms.Form):
 
         self.custom_fields = []
         for field in fields:
-            self.fields[field.name] = field_types[field.field_type]
-            self.fields[field.name].required = field.required
+            self.fields[field.name] = field_types[field.field_type](required=field.required)
             if field.field_type == 'Date':
                 self.fields[field.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
+            elif field.field_type == 'Text':
+                self.fields[field.name].widget = forms.Textarea()
             self.custom_fields.append(field)
 
     def save(self, request: WSGIRequest):
