@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap");
-/*@import url("https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css");*/
 
 body {
     margin: 0;
@@ -38,4 +37,16 @@ p {
     display: flex;
     justify-content: space-between;
     margin: auto;
+}
+
+header {
+    background-color: #8B6BFF;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+header h2 {
+    text-align: center;
+    margin: 0;
 }

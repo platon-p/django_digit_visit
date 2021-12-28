@@ -6,7 +6,15 @@ function showAnswer(elemId) {
 }
 
 let elem = document.getElementById('address');
-elem.oninput = function () {
-    document.getElementById('or').innerHTML = elem.value;
-    console.log('asd')
-};
+if (elem) {
+    elem.oninput = function () {
+        document.getElementById('or').innerHTML = elem.value;
+        console.log('asd')
+    };
+}
+const copy_btn = document.getElementById('copy_btn');
+copy_btn.onclick = function () {
+    navigator.clipboard.writeText(copy_btn.getAttribute('content'))
+    copy_btn.innerText = 'Скопировано'
+    copy_btn.style.color = '#1aaf1a'
+}

@@ -1,7 +1,9 @@
 import datetime as dt
-from os.path import join
 
+from allauth.account.decorators import login_required
+from allauth.account.signals import user_signed_up
 from allauth.account.views import LoginView, SignupView
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.models import Site
 from django.core.handlers.wsgi import WSGIRequest
@@ -9,9 +11,12 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from digit_visit.settings import STATIC_URL
-from digit_visit_app.models import Cards, Subscription, Data, DataType, CardsContent
+from digit_visit_app.models import Cards, Subscription, Data, CardsContent
 from .forms import CreateForm
+from .utils import calculate_age, add_user_data
+
+User = get_user_model()
+domain = Site.objects.get_current().domain
 
 
 class HomePageView(TemplateView):
@@ -61,6 +66,7 @@ class ProfilePageView(LoginRequiredMixin, TemplateView):
         user_info = list(Data.objects.filter(user=self.request.user).all())
         user_info = [i.to_lst() for i in user_info]
         context['user_info'] = {i[1]: i[2] for i in user_info}
+        context['domain'] = domain
         return context
 
 
@@ -83,6 +89,19 @@ class RegisterPageView(SignupView):
         return context
 
 
+def user_signed_up_receiver(request: WSGIRequest, user: User, **kwargs):
+    if user.first_name:
+        add_user_data(user, 'Имя', user.first_name)
+    if user.last_name:
+        add_user_data(user, 'Фамилия', user.last_name)
+    if user.email:
+        add_user_data(user, 'Email', user.email)
+
+
+user_signed_up.connect(user_signed_up_receiver, sender=User)
+
+
+@login_required
 def create_page_view(request: WSGIRequest):
     subs = Subscription.objects.filter(user=request.user).all()
     subscription_is_active = False
@@ -90,7 +109,6 @@ def create_page_view(request: WSGIRequest):
         sub = subs[len(subs) - 1]
         if sub.end_date.date() >= dt.date.today():
             subscription_is_active = True
-    domain = Site.objects.get_current().domain + '/v/'
     if request.method == 'POST':
         form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
         if form.is_valid():
@@ -100,17 +118,21 @@ def create_page_view(request: WSGIRequest):
         user_data = Data.objects.filter(user=request.user).all()
         user_data = {i.to_lst()[1]: i.to_lst()[2] for i in user_data}
         form = CreateForm(is_free=not subscription_is_active, initial=user_data)
-        domain = Site.objects.get_current().domain + '/v/'
-    return render(request, 'create_page.html', {'form': form, 'domain': domain})
+    return render(request, 'create_page.html', {'form': form, 'domain': domain + '/v/'})
 
 
 class ShowCardView(TemplateView):
     template_name = 'show_card.html'
 
     def get_context_data(self, **kwargs):
-        a = get_object_or_404(Cards, slug=self.kwargs['slug'])
-        card_content = CardsContent.objects.filter(card=a).all()
-
+        card = get_object_or_404(Cards, slug=self.kwargs['slug'])
+        card_content = CardsContent.objects.filter(card=card).all()
         card_content = {i.data.data_type.name: i.data.content for i in card_content}
-        context = {'card_content': card_content}
+        card_content['Изображение'] = card.image.url
+        # считаем возраст
+        age = calculate_age(card_content['Дата рождения'])
+        card_content['Возраст'] = age
+
+        context = {'card_content': card_content, 'domain': domain}
+
         return context

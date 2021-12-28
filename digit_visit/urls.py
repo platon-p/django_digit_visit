@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('digit_visit_app.urls')),
     url('accounts/', include('allauth.urls')),
+    path('', include('qr_code.urls', namespace='qr_code')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,21 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width; initial-scale=0.7">
 
+
     <title>DigitVisit - ваша цифровая визитка</title>
 
     {% load static %}
     {% load poll_extras %}
     <link rel="stylesheet" href="{% static 'css/card.css' %}">
+    <meta property="og:title" content="{{ card_content| getkey:'Фамилия' }} {{ card_content| getkey:'Имя' }}">
+    <meta property="og:site_name" content="Визитка DigitVisit">
+    <meta property="og:url" content="{{ domain }}{{ request.path }}">
+    <meta property="og:image" content="{{ card_content| getkey:'Изображение' }}">
+    <meta prefix="og:image:width" content="400">
+    <meta property="og:image:height" content="400">
+
 </head>
 <header>
-    <h1></h1>
+    <h2>{{ card_content| getkey:'Место работы' }}</h2>
 </header>
 <body>
 <div class="row">
-    <img src="{% static 'images/image.jpeg' %}" alt="" style="width: 45%">
+    <img src="{{ card_content| getkey:'Изображение' }}" alt="" style="width: 45%; object-fit: cover">
     <div style="width: 45%;">
-        <p style="text-align: left;font-weight: 600;">{{ card_content| getkey:'Фамилия' }} {{ card_content| getkey:'Имя' }}</p>
+        <p style="text-align: left;font-weight: 700;">{{ card_content| getkey:'Фамилия' }} {{ card_content| getkey:'Имя' }}</p>
         <br>
+        <p style="text-align: left;font-weight: 500;">{{ card_content| getkey:'Возраст' }}</p>
         <p style="text-align: left; font-weight: 300; color: #cccccc">{{ card_content| getkey:'Должность' }}</p>
     </div>
 </div>
@@ -41,7 +50,6 @@
             </div>
         </a>
     </div>
-
 </div>
 <div class="row">
     <div class="btn" style="width: 100%; padding: 0;">

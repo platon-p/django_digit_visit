@@ -1,15 +1,10 @@
 import datetime as dt
 
-from allauth.account.signals import user_signed_up
-from django.contrib.auth import get_user_model
-from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
 from django.utils import timezone
 
 from digit_visit.settings import STATIC_URL
 from os.path import join
-
-User = get_user_model()
 
 
 class SubscriptionType(models.Model):
@@ -104,18 +99,3 @@ class CardsContent(models.Model):
 
     def __str__(self):
         return f'Визитка {self.card.title}\t-\t{self.data}'
-
-
-from .utils import *
-
-
-def user_signed_up_receiver(request: WSGIRequest, user: User, **kwargs):
-    if user.first_name:
-        add_user_data(user, 'Имя', user.first_name)
-    if user.last_name:
-        add_user_data(user, 'Фамилия', user.last_name)
-    if user.email:
-        add_user_data(user, 'Email', user.email)
-
-
-user_signed_up.connect(user_signed_up_receiver, sender=User)

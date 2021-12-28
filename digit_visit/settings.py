@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-x_q)i0z*o+me(u(b*uo&8iln342r5ejcxc%kfs!mg!_o+zses1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['626c-62-217-190-54.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.vk',
 
     'import_export',
+    'qr_code'
 ]
 SITE_ID = 1
 

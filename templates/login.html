@@ -25,6 +25,7 @@
                 </a>
             </div>
             <form method="post">
+                {% csrf_token %}
                 {% for field in form %}
                     {% if field.name != 'remember' %}
                         {{ field }}

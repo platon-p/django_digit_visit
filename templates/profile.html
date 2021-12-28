@@ -7,6 +7,8 @@
     <title>DigitVisit - ваша цифровая визитка</title>
 
     {% load static %}
+    {% load qr_code %}
+    {% load poll_extras %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -16,7 +18,7 @@
 <div class="nav-desktop">
     <a href="{% url 'profile_page' %}" class="logo">DigitVisit</a>
     <div class="nav-right">
-        <a href="/settings">Настройки</a>
+        <a href="{% url 'settings' %}">Настройки</a>
         <a href="{% url 'account_logout' %}">Выйти</a>
     </div>
 </div>
@@ -33,10 +35,18 @@
     <div style="display: flex; flex-direction: row; flex-wrap: wrap">
         {% for card in cards %}
             <div class="card">
+            <div style="margin-bottom: 0.5em;">
                 <p class="p-title">{{ card.title }}</p>
-
                 <br>
                 <p>Создано: {{ card.create_date }}</p>
+            </div>
+                {% with "http://"|addstr:domain|addstr:"/v/"|addstr:card.slug as addr %}
+                    <a style="font-weight: 300; color: #ccc; cursor: pointer" id="copy_btn"
+                       content="{{ addr }}">Скопировать адрес</a><br>
+                    <a style="font-weight: 300; color: #ccc;"
+                       href="{% qr_url_from_text addr dark_color='#000000' light_color='#fffffe' %}"
+                       download>Скачать QR-код</a>
+                {% endwith %}
             </div>
         {% endfor %}
         <div class="card add-card">
@@ -60,6 +70,7 @@
             {% endif %}
         {% endif %}
     </div>
+    <script src="{% static 'scripts/index.js' %}"></script>
 
 </div>
 </body>

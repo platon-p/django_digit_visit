@@ -39,6 +39,8 @@ class CreateForm(forms.Form):
         for field in fields:
             self.fields[field.name] = field_types[field.field_type]
             self.fields[field.name].required = field.required
+            if field.field_type == 'Date':
+                self.fields[field.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
             self.custom_fields.append(field)
 
     def save(self, request: WSGIRequest):
