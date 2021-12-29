@@ -12,9 +12,16 @@ if (elem) {
         console.log('asd')
     };
 }
-const copy_btn = document.getElementById('copy_btn');
-copy_btn.onclick = function () {
-    navigator.clipboard.writeText(copy_btn.getAttribute('content'))
-    copy_btn.innerText = 'Скопировано'
-    copy_btn.style.color = '#1aaf1a'
-}
+const copy_btns = document.querySelectorAll('.copy_btn')
+copy_btns.forEach(function (elem) {
+        elem.addEventListener('click', function (event) {
+            navigator.clipboard.writeText(elem.getAttribute('content'))
+            elem.innerText = 'Скопировано'
+            elem.style.color = '#1aaf1a'
+            setTimeout(function () {
+                elem.innerText = 'Скопировать адрес'
+                elem.style.color = '#ccc'
+            }, (2 * 1000))
+        })
+    }
+)

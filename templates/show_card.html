@@ -19,9 +19,11 @@
     <meta property="og:image:height" content="400">
 
 </head>
-<header>
-    <h2>{{ card_content| getkey:'Место работы' }}</h2>
-</header>
+{% if card_content|getkey:'Место работы' %}
+    <header>
+        <h2>{{ card_content| getkey:'Место работы' }}</h2>
+    </header>
+{% endif %}
 <body>
 <div class="row">
     <img src="{{ card_content| getkey:'Изображение' }}" alt="" style="width: 45%; object-fit: cover">
@@ -51,14 +53,16 @@
         </a>
     </div>
 </div>
-<div class="row">
-    <div class="btn" style="width: 100%; padding: 0;">
-        <div style="padding: 1em">
-            <h3 style="margin: 0 0 0.6em;">О себе</h3>
-            <p style="text-align: left; color: #d9d9d9; font-weight: 300;">
-                {{ card_content| getkey:'О себе' }}
-            </p>
+{% if card_content|getkey:'' %}
+    <div class="row">
+        <div class="btn" style="width: 100%; padding: 0;">
+            <div style="padding: 1em">
+                <h3 style="margin: 0 0 0.6em;">О себе</h3>
+                <p style="text-align: left; color: #d9d9d9; font-weight: 300;">
+                    {{ card_content| getkey:'О себе' }}
+                </p>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 </body>

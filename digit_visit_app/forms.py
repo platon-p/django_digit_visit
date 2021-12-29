@@ -48,7 +48,7 @@ class CreateForm(forms.Form):
         # Создаем визитку
         card = Cards(
             user=request.user,
-            title=self.data.get('Название', 'Новая визитка 1'),
+            title=self.data.get('Название') or 'Новая визитка',
             slug=self.data.get('Адрес визитки'),
             image=self.files.get('Изображение')
         )

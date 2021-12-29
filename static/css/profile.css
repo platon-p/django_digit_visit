@@ -13,6 +13,7 @@ p {
 
 p.p-title {
     font-size: 1.2em;
+    font-weight: 600;
 }
 
 
@@ -22,4 +23,11 @@ p.p-title {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.copy_btn {
+    transition-duration: 0.1s;
+    font-weight: 300;
+    color: #ccc;
+    cursor: pointer
 }
