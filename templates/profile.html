@@ -35,11 +35,13 @@
     <div style="display: flex; flex-direction: row; flex-wrap: wrap">
         {% for card in cards %}
             <div class="card">
-                <div style="margin-bottom: 0.5em;">
-                    <p class="p-title">{{ card.title }}</p>
-                    <br>
-                    <p>Создано: {{ card.create_date }}</p>
-                </div>
+                <a href="/edit/{{ card.slug }}/">
+                    <div style="margin-bottom: 0.5em;">
+                        <p class="p-title">{{ card.title }}</p>
+                        <br>
+                        <p>Создано: {{ card.create_date }}</p>
+                    </div>
+                </a>
                 {% with "http://"|addstr:domain|addstr:"/v/"|addstr:card.slug as addr %}
                     <a class="copy_btn" content="{{ addr }}">Скопировать адрес</a><br>
                     <a style="font-weight: 300; color: #ccc;"
@@ -61,11 +63,11 @@
             <p>Подписка не активна</p>
             <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
         {% else %}
-            <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date }}</p>
+            <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date.date }}</p>
             {% if time_left < 7 %}
                 <p>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</p>
             {% else %}
-                <p>Подписка активна. Осталось {{ time_left }} дн.</p>
+                <p>Осталось {{ time_left }} дн.</p>
             {% endif %}
         {% endif %}
     </div>

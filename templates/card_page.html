@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>DigitVisit - ваша цифровая визитка</title>
+    <title>{{ title }}</title>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-    {#    <link rel="stylesheet" href="{% static 'css/login.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/create.css' %}">
 
 </head>
-<body>
+<body style="padding-left: 1em">
+<h2>{{ title }}</h2>
 <form method="POST" action="" enctype='multipart/form-data'>
     {% csrf_token %}
     <table>
@@ -38,16 +38,34 @@
                     </td>
                 </tr>
                 <tr style="height: 1em;"></tr>
+            {% elif field.label == 'Изображение' %}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <img src=" {{ form.image_url }}" alt="" style="max-height: 14em; max-width: 14em">
+                </td>
             {% endif %}
         {% endfor %}
+        {% if form.message %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><p style="color: #ccc;">{{ form.message }}</p>
+                </td>
+            </tr>
+        {% endif %}
+
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td align="left"><input type="submit" value="Создать" class="btn btn-success"></td>
+            <td align="left"><input type="submit" value="Сохранить" class="btn btn-success"></td>
         </tr>
-    </table>
-    <script src="{% static 'scripts/index.js' %}"></script>
 
+    </table>
+
+    <script src="{% static 'scripts/index.js' %}"></script>
 </form>
 </body>

@@ -58,11 +58,52 @@ class CreateForm(forms.Form):
             val = self.data.get(data_type.name, False)
             if not val:
                 continue
-            exist = Data.objects.filter(user=request.user, data_type=data_type, content=val).last()
-            if not exist:
-                data = Data(user=request.user, data_type=data_type, content=val)
-                data.save()
-                card_content = CardsContent(card=card, data=data)
-            else:
-                card_content = CardsContent(card=card, data=exist)
+            data = Data(user=request.user, data_type=data_type, content=val)
+            data.save()
+            card_content = CardsContent(card=card, data=data)
             card_content.save()
+
+
+class EditForm(forms.Form):
+    def __init__(self, card: Cards, card_content: list[CardsContent], active: bool, *args, **kwargs):
+        super(EditForm, self).__init__(*args, **kwargs)
+        self.card = card
+        self.card_content = card_content
+        self.active = active
+
+        self.fields['Название'] = forms.CharField(required=False, initial=card.title)
+        self.fields['Адрес визитки'] = forms.SlugField(required=True, initial=card.slug)
+        self.fields['Адрес визитки'].widget.attrs['id'] = 'address'
+        self.fields['Изображение'] = forms.ImageField(required=False)
+        self.image_url = card.image.url
+
+        for field in card_content:
+            self.fields[field.data.data_type.name] = field_types[field.data.data_type.field_type](
+                required=field.data.data_type.required,
+                initial=field.data.content,
+                disabled=not active and not field.data.data_type.is_free,
+            )
+            if self.fields[field.data.data_type.name].disabled:
+                self.message = 'Некоторые поля недоступны, так как ваша подписка неактивна'
+            if field.data.data_type.field_type == 'Text':
+                self.fields[field.data.data_type.name].widget = forms.Textarea()
+            if field.data.data_type.field_type == 'Date':
+                self.fields[field.data.data_type.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
+
+    def save(self):
+        for key, val in self.data.items():
+            if key == 'csrfmiddlewaretoken':
+                continue
+            elif key == 'Название':
+                self.card.title = val
+            elif key == 'Адрес':
+                self.card.slug = val
+            elif key == 'Изображение':
+                if val:
+                    self.card.image = val
+            else:
+                for i in range(len(self.card_content)):
+                    if self.card_content[i].data.data_type.name == key:
+                        self.card_content[i].data.content = val
+                        self.card_content[i].data.save(force_update=True)
+        self.card.save()

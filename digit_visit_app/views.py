@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from digit_visit_app.models import Cards, Subscription, Data, CardsContent
-from .forms import CreateForm
+from .forms import CreateForm, EditForm
 from .utils import calculate_age, add_user_data, is_subscribe_active
 
 User = get_user_model()
@@ -104,21 +104,33 @@ user_signed_up.connect(user_signed_up_receiver, sender=User)
 @login_required
 def create_page_view(request: WSGIRequest):
     subscription_is_active = is_subscribe_active(request.user)
+    title = 'Создать визитку'
+    form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
     if request.method == 'POST':
-        form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
         if form.is_valid():
             form.save(request)
             return redirect(reverse('profile_page'))
     else:
         user_data = Data.objects.filter(user=request.user).all()
         user_data = {i.to_lst()[1]: i.to_lst()[2] for i in user_data}
-        form = CreateForm(is_free=not subscription_is_active, initial=user_data)
-    return render(request, 'create_page.html', {'form': form, 'domain': domain + '/v/'})
+        form.initial = user_data
+    return render(request, 'card_page.html', {'form': form, 'domain': domain + '/v/', 'title': title})
 
 
 @login_required
-def edit_page_view(request: WSGIRequest):
-    pass
+def edit_page_view(request: WSGIRequest, slug):
+    active = is_subscribe_active(request.user)
+    card = get_object_or_404(Cards, slug=slug, user=request.user)
+    card_content = CardsContent.objects.filter(card=card).all()
+    form = EditForm(card, card_content, active, request.POST or None, request.FILES or None)
+    title = 'Редактировать визитку'
+    if request.method == 'POST':
+        if Cards.objects.filter(slug=slug).first().user != request.user:
+            form.add_error('Адрес визитки', 'Адрес уже занят')
+        elif form.is_valid():
+            form.save()
+            return redirect(reverse('profile_page'))
+    return render(request, 'card_page.html', {'form': form, 'domain': domain + '/v/', 'title': title})
 
 
 class ShowCardView(TemplateView):
