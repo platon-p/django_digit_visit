@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 
 from digit_visit_app.models import Cards, Subscription, Data, CardsContent
 from .forms import CreateForm
-from .utils import calculate_age, add_user_data
+from .utils import calculate_age, add_user_data, is_subscribe_active
 
 User = get_user_model()
 domain = Site.objects.get_current().domain
@@ -103,12 +103,7 @@ user_signed_up.connect(user_signed_up_receiver, sender=User)
 
 @login_required
 def create_page_view(request: WSGIRequest):
-    subs = Subscription.objects.filter(user=request.user).all()
-    subscription_is_active = False
-    if subs:
-        sub = subs[len(subs) - 1]
-        if sub.end_date.date() >= dt.date.today():
-            subscription_is_active = True
+    subscription_is_active = is_subscribe_active(request.user)
     if request.method == 'POST':
         form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
         if form.is_valid():
@@ -121,17 +116,25 @@ def create_page_view(request: WSGIRequest):
     return render(request, 'create_page.html', {'form': form, 'domain': domain + '/v/'})
 
 
+@login_required
+def edit_page_view(request: WSGIRequest):
+    pass
+
+
 class ShowCardView(TemplateView):
     template_name = 'show_card.html'
 
     def get_context_data(self, **kwargs):
         card = get_object_or_404(Cards, slug=self.kwargs['slug'])
         card_content = CardsContent.objects.filter(card=card).all()
-        card_content = {i.data.data_type.name: i.data.content for i in card_content}
+        active = is_subscribe_active(self.request.user)
+        card_content = {i.data.data_type.name: i.data.content for i in card_content
+                        if i.data.data_type.is_free in (True, not active)}
         card_content['Изображение'] = card.image.url
         # считаем возраст
-        age = calculate_age(card_content['Дата рождения'])
-        card_content['Возраст'] = age
+        age = calculate_age(card_content.get('Дата рождения'))
+        if age:
+            card_content['Возраст'] = age
 
         context = {'card_content': card_content, 'domain': domain}
 

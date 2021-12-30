@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from .models import DataType, Data, Cards
+from .models import DataType, Data, Cards, Subscription
 import datetime as dt
 
 
@@ -12,12 +12,7 @@ def add_user_data(user: User, data_name: str, content: str):
     data.save()
 
 
-def create_card(user: User, title: str):
-    card = Cards(user=user, title=title)
-    card.save()
-
-
-def calculate_age(birthdate):
+def calculate_age(birthdate) -> str:
     birthdate = dt.datetime.strptime(birthdate, '%d.%m.%Y').date()
     age = str(dt.date.today().year - birthdate.year - (
             (dt.date.today().month, dt.date.today().day) < (birthdate.month, birthdate.day)
@@ -29,3 +24,11 @@ def calculate_age(birthdate):
     elif age[-1] in '567890':
         return age + ' лет'
 
+
+def is_subscribe_active(user: User) -> bool:
+    subs = Subscription.objects.filter(user=user).all()
+    if subs:
+        sub = subs[len(subs) - 1]
+        if sub.end_date.date() >= dt.date.today():
+            return True
+    return False

@@ -3,9 +3,6 @@ import datetime as dt
 from django.db import models
 from django.utils import timezone
 
-from digit_visit.settings import STATIC_URL
-from os.path import join
-
 
 class SubscriptionType(models.Model):
     name = models.CharField('Название', max_length=30)
@@ -54,8 +51,8 @@ class Subscription(models.Model):
     end_date = models.DateTimeField(editable=False)
 
     def save(self, *args, **kwargs):
-        self.start_date = dt.datetime.now()
-        self.end_date = dt.datetime.now() + dt.timedelta(days=self.subscription.duration)
+        self.start_date = timezone.now()
+        self.end_date = timezone.now() + dt.timedelta(days=self.subscription.duration)
         super(Subscription, self).save(*args, **kwargs)
 
     def __str__(self):

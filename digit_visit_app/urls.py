@@ -9,5 +9,6 @@ urlpatterns = [
     path('accounts/signup/', views.RegisterPageView.as_view(), name='signup_page'),
     path('create/', views.create_page_view, name='create'),
     path('v/<slug:slug>/', views.ShowCardView.as_view()),
+    path('edit/<slug:slug>/', views.edit_page_view),
     path('settings/', lambda x: x, name='settings')
 ]
