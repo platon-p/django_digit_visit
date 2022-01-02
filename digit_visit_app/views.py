@@ -148,6 +148,6 @@ class ShowCardView(TemplateView):
         if age:
             card_content['Возраст'] = age
 
-        context = {'card_content': card_content, 'domain': domain}
+        context = {'card_content': card_content, 'domain': domain, 'active': active}
 
         return context

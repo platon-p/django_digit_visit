@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.vk',
 
     'import_export',
-    'qr_code'
+    'qr_code',
 ]
 SITE_ID = 1
 

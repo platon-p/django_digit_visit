@@ -10,7 +10,6 @@
     {% load qr_code %}
     {% load poll_extras %}
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
 <body>
@@ -32,7 +31,7 @@
         <h4>Здравствуйте!</h4>
     {% endif %}
     <h3>Ваши визитки</h3>
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
         {% for card in cards %}
             <div class="card">
                 <a href="/edit/{{ card.slug }}/">
@@ -58,20 +57,17 @@
     </div>
     <br>
     <h3>Подписка</h3>
-    <div>
-        {% if not subscription_is_active %}
-            <p>Подписка не активна</p>
-            <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
+    {% if not subscription_is_active %}
+        <p>Подписка не активна</p>
+        <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
+    {% else %}
+        <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date.date }}</p>
+        {% if time_left < 7 %}
+            <p>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</p>
         {% else %}
-            <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date.date }}</p>
-            {% if time_left < 7 %}
-                <p>Ваша подписка скоро заканчивается! Осталось всего {{ time_left }} дн.</p>
-            {% else %}
-                <p>Осталось {{ time_left }} дн.</p>
-            {% endif %}
+            <p>Осталось {{ time_left }} дн.</p>
         {% endif %}
-    </div>
+    {% endif %}
     <script src="{% static 'scripts/index.js' %}"></script>
-
 </div>
 </body>

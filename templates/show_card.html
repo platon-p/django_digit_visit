@@ -53,16 +53,66 @@
         </a>
     </div>
 </div>
-{% if card_content|getkey:'' %}
+{% if card_content|getkey:'О себе' %}
     <div class="row">
-        <div class="btn" style="width: 100%; padding: 0;">
-            <div style="padding: 1em">
-                <h3 style="margin: 0 0 0.6em;">О себе</h3>
-                <p style="text-align: left; color: #d9d9d9; font-weight: 300;">
-                    {{ card_content| getkey:'О себе' }}
-                </p>
-            </div>
+        <div class="btn" style="width: 100%; padding: 1em;">
+            <h3 style="margin: 0 0 0.6em;">О себе</h3>
+            <p style="text-align: left; color: #d9d9d9; font-weight: 300;">
+                {{ card_content| getkey:'О себе' }}
+            </p>
         </div>
     </div>
 {% endif %}
+{% if card_content|getkey:'Образование' %}
+    <div class="row">
+        <div class="btn" style="padding: 0.8em 1em; display:flex; vertical-align: middle;
+    align-items: center;">
+            <img src="{% static 'images/edu.svg' %}" alt="" style="margin-right: 1em;">
+            <p style="text-align: left; color: #d9d9d9; font-weight: 300; display: inline">
+                {{ card_content| getkey:'Образование' }}
+            </p>
+        </div>
+    </div>
+{% endif %}
+{% if not active %}
+    <div class="row">
+        <a href="{% url 'home' %}" style="text-align: right; display:block; width: 100%; margin: 0; font-size: 0.8em">Создано
+            на DigitVisit</a>
+    </div>
+{% endif %}
+<div class="row">
+    {% with card_content|getkey:'Vk' as vk %}
+        {% if vk %}
+            <div style="width: auto; flex-grow: 1">
+                <a href="https://{{ vk }}" target="_blank">
+                    <div class="btn social-media">
+                        <img src="{% static 'images/vk.svg' %}" alt="">
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% with card_content|getkey:'Instagram' as insta %}
+        {% if insta %}
+            <div style="width: auto; flex-grow: 1">
+                <a href="https://{{ insta }}" target="_blank">
+                    <div class="btn social-media">
+                        <img src="{% static 'images/insta.svg' %}" alt="">
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% with card_content|getkey:'Facebook' as facebook %}
+        {% if facebook %}
+            <div style="width: auto; flex-grow: 1">
+                <a href="https://{{ facebook }}" target="_blank">
+                    <div class="btn social-media">
+                        <img src="{% static 'images/facebook.svg' %}" alt="">
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
 </body>

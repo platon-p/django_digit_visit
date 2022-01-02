@@ -20,6 +20,13 @@ def validate_card(value):
         )
 
 
+def validate_url(value: str):
+    if value.startswith('http'):
+        raise ValidationError(
+            _('Адрес не должен содержать "https://"'),
+        )
+
+
 class CreateForm(forms.Form):
     def __init__(self, *args, **kwargs):
         if kwargs['is_free']:
@@ -42,6 +49,9 @@ class CreateForm(forms.Form):
                 self.fields[field.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
             elif field.field_type == 'Text':
                 self.fields[field.name].widget = forms.Textarea()
+            elif field.name in ('Vk', 'Instagram', 'Facebook'):
+                self.fields[field.name].widget.attrs['placeholder'] = 'Ссылка на страницу'
+
             self.custom_fields.append(field)
 
     def save(self, request: WSGIRequest):
@@ -69,7 +79,6 @@ class EditForm(forms.Form):
         super(EditForm, self).__init__(*args, **kwargs)
         self.card = card
         self.card_content = card_content
-        self.active = active
 
         self.fields['Название'] = forms.CharField(required=False, initial=card.title)
         self.fields['Адрес визитки'] = forms.SlugField(required=True, initial=card.slug)
@@ -85,10 +94,12 @@ class EditForm(forms.Form):
             )
             if self.fields[field.data.data_type.name].disabled:
                 self.message = 'Некоторые поля недоступны, так как ваша подписка неактивна'
-            if field.data.data_type.field_type == 'Text':
+            elif field.data.data_type.field_type == 'Text':
                 self.fields[field.data.data_type.name].widget = forms.Textarea()
-            if field.data.data_type.field_type == 'Date':
+            elif field.data.data_type.field_type == 'Date':
                 self.fields[field.data.data_type.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
+            elif field.data.data_type.name in ('Vk', 'Instagram', 'Facebook'):
+                self.fields[field.data.data_type.name].widget.attrs['placeholder'] = 'Ссылка на страницу'
 
     def save(self):
         for key, val in self.data.items():

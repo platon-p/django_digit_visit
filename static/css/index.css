@@ -1,7 +1,6 @@
 .plus {
     border-radius: 1.5em;
     margin-bottom: 0.5em;
-    padding: 1em 0.7em 1em 1em;
 }
 
 .pluses {
@@ -13,7 +12,7 @@
 
 @media screen and (min-width: 1025px) {
     .plus {
-        width: 45%;
+        width: 49.5%;
     }
 }
 
