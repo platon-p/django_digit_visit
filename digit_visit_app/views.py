@@ -139,7 +139,7 @@ class ShowCardView(TemplateView):
     def get_context_data(self, **kwargs):
         card = get_object_or_404(Cards, slug=self.kwargs['slug'])
         card_content = CardsContent.objects.filter(card=card).all()
-        active = is_subscribe_active(self.request.user)
+        active = is_subscribe_active(card.user)
         card_content = {i.data.data_type.name: i.data.content for i in card_content
                         if i.data.data_type.is_free in (True, not active)}
         card_content['Изображение'] = card.image.url
