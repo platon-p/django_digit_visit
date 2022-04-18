@@ -16,7 +16,6 @@ from .forms import CreateForm, EditForm
 from .utils import calculate_age, add_user_data, is_subscribe_active
 
 User = get_user_model()
-domain = Site.objects.get_current().domain
 
 
 class HomePageView(TemplateView):
@@ -30,18 +29,19 @@ class HomePageView(TemplateView):
             ['Pro',
              ['Все возможности Free', 'До трёх ссылок', 'Мессенджеры', 'Соцсети', 'Экспорт в контакты', 'Портфолио',
               'Образование'], '799 руб/год', 'или 99 руб/мес'],
-            ['Business',
-             ['Все возможности Pro', 'Название компании', 'Адрес офиса', 'Выгоднее при использовании для бизнеса'],
-             '5 990 руб/год', 'за 10 сотрудников']
+            # ['Business',
+            #  ['Все возможности Pro', 'Название компании', 'Адрес офиса', 'Выгоднее при использовании для бизнеса'],
+            #  '5 990 руб/год', 'за 10 сотрудников']
         ]
         questions = [
             ['Как поделиться визиткой?',
              'Создав визитку, нажмите "поделиться", после чего скопируйте ссылку или QR-код и отправьте собеседнику'],
             ['Как работает экспорт в контакты?',
-             'На основе данных вашего профиля система создает контакт, который можно скачать и добавить в записную книжку'],
+             'На основе данных вашего профиля система создает контакт, который можно скачать и добавить в записную '
+             'книжку'],
             ['Я могу добавить соцсеть, которой нет в списке?',
-             'Помимо Vk, Facebook, Instagram вы можете добавить до трех собственных ссылок, например, на ваш личный сайт, '
-             'или сайт компании']
+             'Помимо Vk, Facebook, Instagram вы можете добавить до трех собственных ссылок, например, на ваш личный '
+             'сайт, или сайт компании']
         ]
         context['tarifs'] = tarifs
         context['questions'] = questions
@@ -66,7 +66,8 @@ class ProfilePageView(LoginRequiredMixin, TemplateView):
         user_info = list(Data.objects.filter(user=self.request.user).all())
         user_info = [i.to_lst() for i in user_info]
         context['user_info'] = {i[1]: i[2] for i in user_info}
-        context['domain'] = domain
+        context['domain'] = self.request.get_host()
+
         return context
 
 
@@ -103,6 +104,7 @@ user_signed_up.connect(user_signed_up_receiver, sender=User)
 
 @login_required
 def create_page_view(request: WSGIRequest):
+    domain = request.get_host()
     subscription_is_active = is_subscribe_active(request.user)
     title = 'Создать визитку'
     form = CreateForm(request.POST or None, request.FILES or None, is_free=not subscription_is_active)
@@ -128,9 +130,9 @@ def edit_page_view(request: WSGIRequest, slug):
         if Cards.objects.filter(slug=slug).first().user != request.user:
             form.add_error('Адрес визитки', 'Адрес уже занят')
         elif form.is_valid():
-            form.save()
+            form.save(request)
             return redirect(reverse('profile_page'))
-    return render(request, 'card_page.html', {'form': form, 'domain': domain + '/v/', 'title': title})
+    return render(request, 'card_page.html', {'form': form, 'domain': request.get_host() + '/v/', 'title': title})
 
 
 class ShowCardView(TemplateView):
@@ -144,10 +146,9 @@ class ShowCardView(TemplateView):
                         if i.data.data_type.is_free in (True, not active)}
         card_content['Изображение'] = card.image.url
         # считаем возраст
-        age = calculate_age(card_content.get('Дата рождения'))
-        if age:
-            card_content['Возраст'] = age
+        if card_content.get('Дата рождения'):
+            card_content['Возраст'] = calculate_age(card_content.get('Дата рождения'))
 
-        context = {'card_content': card_content, 'domain': domain, 'active': active}
+        context = {'card_content': card_content, 'domain': self.request.get_host(), 'active': active}
 
         return context

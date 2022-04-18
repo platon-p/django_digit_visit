@@ -56,7 +56,8 @@ class Subscription(models.Model):
         super(Subscription, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.subscription.name} подписка для {self.user.first_name} с {self.start_date} по {self.end_date}'
+        return f'{self.subscription.name} подписка для {self.user.first_name} ' \
+               f'с {self.start_date.date()} по {self.end_date.date()}'
 
 
 class Data(models.Model):

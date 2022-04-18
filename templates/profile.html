@@ -17,7 +17,7 @@
 <div class="nav-desktop">
     <a href="{% url 'profile_page' %}" class="logo">DigitVisit</a>
     <div class="nav-right">
-        <a href="{% url 'settings' %}">Настройки</a>
+{#        <a href="{% url 'settings' %}">Настройки</a>#}
         <a href="{% url 'account_logout' %}">Выйти</a>
     </div>
 </div>
@@ -58,7 +58,7 @@
     <br>
     <h3>Подписка</h3>
     {% if not subscription_is_active %}
-        <p>Подписка не активна</p>
+        <p>Подписка неактивна</p>
         <p>Перейдите на тариф Pro и получите доступ к новым возможностям сервиса</p>
     {% else %}
         <p> Подписка {{ subscription.subscription.name }}. Активна до {{ subscription.end_date.date }}</p>

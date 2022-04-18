@@ -2,6 +2,8 @@ from django import forms
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.db.models.query import QuerySet
+
 from .models import DataType, Cards, Data, CardsContent
 
 field_types = {
@@ -56,6 +58,7 @@ class CreateForm(forms.Form):
 
     def save(self, request: WSGIRequest):
         # Создаем визитку
+
         card = Cards(
             user=request.user,
             title=self.data.get('Название') or 'Новая визитка',
@@ -75,7 +78,7 @@ class CreateForm(forms.Form):
 
 
 class EditForm(forms.Form):
-    def __init__(self, card: Cards, card_content: list[CardsContent], active: bool, *args, **kwargs):
+    def __init__(self, card: Cards, card_content: QuerySet[CardsContent], active: bool, *args, **kwargs):
         super(EditForm, self).__init__(*args, **kwargs)
         self.card = card
         self.card_content = card_content
@@ -86,35 +89,43 @@ class EditForm(forms.Form):
         self.fields['Изображение'] = forms.ImageField(required=False)
         self.image_url = card.image.url
 
-        for field in card_content:
-            self.fields[field.data.data_type.name] = field_types[field.data.data_type.field_type](
-                required=field.data.data_type.required,
-                initial=field.data.content,
-                disabled=not active and not field.data.data_type.is_free,
+        for field in DataType.objects.all():
+            info = card_content.filter(data__data_type=field).first()
+            field_input = field_types[field.field_type](
+                required=field.required,
+                initial=info.data.content if info else None,
+                disabled=not active and not field.is_free,
             )
-            if self.fields[field.data.data_type.name].disabled:
+            if field_input.disabled:
                 self.message = 'Некоторые поля недоступны, так как ваша подписка неактивна'
-            elif field.data.data_type.field_type == 'Text':
-                self.fields[field.data.data_type.name].widget = forms.Textarea()
-            elif field.data.data_type.field_type == 'Date':
-                self.fields[field.data.data_type.name].widget.attrs['placeholder'] = 'дд.мм.гггг'
-            elif field.data.data_type.name in ('Vk', 'Instagram', 'Facebook'):
-                self.fields[field.data.data_type.name].widget.attrs['placeholder'] = 'Ссылка на страницу'
+            if field.field_type == 'Text':
+                field_input.widget = forms.Textarea()
+            elif field.field_type == 'Date':
+                field_input.widget.attrs['placeholder'] = 'дд.мм.гггг'
+            elif field.name in ('Vk', 'Instagram', 'Facebook'):
+                field_input.widget.attrs['placeholder'] = 'Ссылка на страницу'
+            self.fields[field.name] = field_input
 
-    def save(self):
+    def save(self, request: WSGIRequest):
         for key, val in self.data.items():
             if key == 'csrfmiddlewaretoken':
                 continue
             elif key == 'Название':
                 self.card.title = val
-            elif key == 'Адрес':
+            elif key in ('Адрес', 'Адрес визитки'):
                 self.card.slug = val
             elif key == 'Изображение':
                 if val:
                     self.card.image = val
             else:
-                for i in range(len(self.card_content)):
-                    if self.card_content[i].data.data_type.name == key:
-                        self.card_content[i].data.content = val
-                        self.card_content[i].data.save(force_update=True)
+                aaa: CardsContent = self.card_content.filter(data__data_type__name=key).first()
+                if aaa:
+                    aaa.data.content = val
+                    aaa.data.save(force_update=True)
+                else:
+                    d = Data(user=request.user, data_type=DataType.objects.get(name=key), content=val)
+                    d.save()
+
+                    cc = CardsContent(card=self.card_content.first().card, data=d)
+                    cc.save()
         self.card.save()

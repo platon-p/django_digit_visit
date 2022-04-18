@@ -65,10 +65,18 @@
     justify-content: space-around;
     margin-left: 10%;
     margin-right: 10%;
+    margin-bottom: 1em;
+    flex-direction: column;
+}
+
+@media (min-width: 801px) {
+    .steps {
+        flex-direction: row;
+    }
 }
 
 .step {
-    width: 30%;
+    margin-bottom: 1em;
 }
 
 .step-num {

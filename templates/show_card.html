@@ -23,6 +23,8 @@
     <header>
         <h2>{{ card_content| getkey:'Место работы' }}</h2>
     </header>
+{% else %}
+    <div style="height: 2em; background: none;"></div>
 {% endif %}
 <body>
 <div class="row">
