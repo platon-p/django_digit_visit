@@ -19,9 +19,9 @@ def calculate_age(birthdate) -> str:
     ))
     if age[-1] == '1':
         return age + ' год'
-    elif age[-1] in '234':
+    if age[-1] in '234':
         return age + ' года'
-    elif age[-1] in '567890':
+    if age[-1] in '567890':
         return age + ' лет'
 
 
