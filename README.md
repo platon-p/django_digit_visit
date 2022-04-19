@@ -1,8 +1,6 @@
 # Цифровые визитки DigitVisit
 
-<img src="https://img.shields.io/github/languages/count/platon-p/django_digit_visit">
-<a href="https://www.codefactor.io/repository/github/platon-p/django_digit_visit"><img src="https://www.codefactor.io/repository/github/platon-p/django_digit_visit/badge"></a>
-<img src="https://img.shields.io/tokei/lines/github/platon-p/django_digit_visit">
+<img src="https://img.shields.io/github/languages/count/platon-p/django_digit_visit"> <a href="https://www.codefactor.io/repository/github/platon-p/django_digit_visit"><img src="https://www.codefactor.io/repository/github/platon-p/django_digit_visit/badge"></a> <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/platon-p/django_digit_visit">
 
 Этот проект является учебным, в нем я постарался использовать все свои знания и получить новые Использованные
 технологии:
