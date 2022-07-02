@@ -14,3 +14,6 @@
    добавляет возможность импорта и экспорта данных, например в csv
 6. [QR-code](https://github.com/dprog-philippe-docourt/django-qr-code) - плагин для создания qr-кодов, их можно
    добавлять напрямую в шаблоне
+
+
+[Telegram](https://t.me/digitvisit)
